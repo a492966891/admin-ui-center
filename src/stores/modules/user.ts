@@ -28,13 +28,18 @@ export const useUserStore = defineStore('user', {
   actions: {
     async login(loginForm: any) {
       try {
-        const res = await request.post<any>('/mock/login', loginForm);
-        const { token, refreshToken } = res.data;
-        this.token = token;
-        this.refreshToken = refreshToken;
-        setToken(token);
-        setRefreshToken(refreshToken);
-        
+        const clientId = import.meta.env.VITE_APP_CLIENT_ID || 'e5cd7e4891bf95d1d19206ce24a7b32e';
+        const params = {
+          tenantId: '000000', // 默认超管租户ID
+          ...loginForm,
+          clientId,
+          grantType: loginForm.grantType || 'password',
+        };
+        const res = await request.post<any>('/auth/login', params);
+        const { access_token } = res.data;
+        this.token = access_token;
+        setToken(access_token);
+
         // 登录成功后直接加载用户信息
         await this.getUserInfo();
         return res;
@@ -42,21 +47,41 @@ export const useUserStore = defineStore('user', {
         return Promise.reject(error);
       }
     },
-    
+
     async getUserInfo() {
       try {
-        const res = await request.get<any>('/mock/user-info');
-        const userInfo = res.data;
-        this.userInfo = userInfo;
-        this.roles = userInfo.roles || [];
-        this.permissions = userInfo.permissions || [];
-        return userInfo;
+        const res = await request.get<any>('/system/user/getInfo');
+        const data = res.data;
+        // 兼容真实接口的 data.user 和 mock 接口直接返回的 data
+        const user = data.user || data;
+
+        this.userInfo = {
+          id: user.userId || user.id,
+          username: user.userName || user.username,
+          nickname: user.nickName || user.nickname || user.userName || user.username,
+          avatar: user.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+          email: user.email,
+          phone: user.phonenumber || user.phone,
+          status: user.status !== undefined ? Number(user.status) : 0,
+          roles: data.roles || user.roles || [],
+          permissions: data.permissions || user.permissions || [],
+          createTime: user.createTime || '',
+        };
+
+        this.roles = this.userInfo.roles;
+        this.permissions = this.userInfo.permissions;
+        return this.userInfo;
       } catch (error) {
         return Promise.reject(error);
       }
     },
-    
+
     async logout() {
+      try {
+        await request.post('/auth/logout');
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
       this.token = '';
       this.refreshToken = '';
       this.userInfo = null;
@@ -64,16 +89,16 @@ export const useUserStore = defineStore('user', {
       this.roles = [];
       removeToken();
       removeRefreshToken();
-      
+
       // 清空标签页
       const tabsStore = useTabsStore();
       tabsStore.removeAllTabs();
-      
+
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
     },
-    
+
     async refreshTokenAction() {
       try {
         const res = await request.post<any>('/mock/refresh-token', {

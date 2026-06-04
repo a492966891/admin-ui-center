@@ -48,17 +48,11 @@ const isCollapsed = computed(() => settingsStore.sidebarCollapsed);
 
 .main-container {
   flex: 1;
-  margin-left: var(--sidebar-width);
   height: 100vh;
   overflow-y: auto;
-  transition: margin-left var(--transition-base);
   display: flex;
   flex-direction: column;
   background-color: var(--bg-color);
-
-  &.collapsed {
-    margin-left: var(--sidebar-collapsed-width);
-  }
 
   .main-content {
     flex: 1;

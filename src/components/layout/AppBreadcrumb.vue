@@ -3,14 +3,14 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-        <!-- 最后一级或者不可点击的节点直接显示文本 -->
+        <!-- 最后一级、不可点击路由或含有子节点的目录项直接显示文本 -->
         <span
-          v-if="index === levelList.length - 1 || item.redirect === 'noRedirect'"
+          v-if="index === levelList.length - 1 || item.redirect === 'noRedirect' || (item.children && item.children.length > 0)"
           class="no-redirect"
         >
-          {{ item.meta.title }}
+          {{ item.meta?.title }}
         </span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+        <a v-else @click.prevent="handleLink(item)">{{ item.meta?.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -20,27 +20,47 @@
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationMatched } from 'vue-router';
+import { useMenuStore } from '~/stores/modules/menu';
 
 const route = useRoute();
 const router = useRouter();
+const menuStore = useMenuStore();
 
-const levelList = ref<RouteLocationMatched[]>([]);
+const levelList = ref<any[]>([]);
+
+// 深度优先搜索，反查当前路由路径在菜单树中的父链
+const findMenuPathChain = (menus: any[], targetPath: string, chain: any[] = []): boolean => {
+  for (const item of menus) {
+    chain.push(item);
+    if (item.path === targetPath) {
+      return true;
+    }
+    if (item.children && item.children.length > 0) {
+      if (findMenuPathChain(item.children, targetPath, chain)) {
+        return true;
+      }
+    }
+    chain.pop();
+  }
+  return false;
+};
 
 const getBreadcrumb = () => {
-  // 只获取带有 meta.title 的 matched 路由层级
-  let matched = route.matched.filter((item) => item.meta && item.meta.title);
+  const chain: any[] = [];
+  const found = findMenuPathChain(menuStore.sidebarMenus, route.path, chain);
   
-  const first = matched[0];
-  // 如果首位不是仪表盘，手动在前面加上仪表盘作为首个面包屑
-  if (first && first.path !== '/dashboard' && first.path !== '/') {
-    matched = ([
-      { path: '/dashboard', meta: { title: '仪表盘' } },
-    ] as any).concat(matched);
+  if (found) {
+    // 1. 如果在菜单树中找到了匹配路径，使用该树的完整父子层级
+    levelList.value = chain.filter(
+      (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
+    );
+  } else {
+    // 2. 如果没找到，降级使用路由 matched 层级，并彻底移除原先强行塞入“仪表盘”前缀的逻辑
+    const matched = route.matched.filter((item) => item.meta && item.meta.title);
+    levelList.value = matched.filter(
+      (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
+    );
   }
-
-  levelList.value = matched.filter(
-    (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
-  );
 };
 
 const handleLink = (item: RouteLocationMatched) => {

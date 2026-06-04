@@ -15,7 +15,7 @@
 
     <!-- 菜单滚动条 -->
     <el-scrollbar class="menu-scrollbar">
-      <el-menu :default-active="activeMenu" :collapse="isCollapsed" :unique-opened="true" :collapse-transition="false"
+      <el-menu :default-active="activeMenu" :collapse="isCollapsed" :unique-opened="true" :collapse-transition="true"
         mode="vertical">
         <!-- 循环渲染菜单 -->
         <sidebar-item v-for="menu in sidebarMenus" :key="menu.path" :item="menu" :base-path="menu.path" />
@@ -53,21 +53,13 @@ const activeMenu = computed(() => {
 
 <style scoped lang="scss">
 .app-sidebar {
-  width: var(--sidebar-width);
   height: 100vh;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
-  transition: width var(--transition-base);
-  z-index: 1001;
-  position: fixed;
-  left: 0;
-  top: 0;
 
   &.collapsed {
-    width: var(--sidebar-collapsed-width);
-    
     .logo-container {
       padding: 0;
       justify-content: center;

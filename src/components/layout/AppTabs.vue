@@ -196,7 +196,7 @@ const closeAll = () => {
     border-radius: 6px;
     cursor: pointer;
     gap: 4px;
-    transition: var(--transition-base);
+    transition: background-color var(--transition-base), border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base);
 
     &:hover {
       border-color: var(--primary-color-hover);
@@ -229,7 +229,7 @@ const closeAll = () => {
       font-size: 11px;
       border-radius: 50%;
       padding: 1px;
-      transition: background-color 0.2s;
+      transition: background-color var(--transition-base);
 
       &:hover {
         background-color: var(--border-color);
@@ -266,20 +266,11 @@ const closeAll = () => {
 /* Tabs 列表过滤过渡动效 */
 .tabs-enter-active,
 .tabs-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.15s ease-out;
 }
 
 .tabs-enter-from,
 .tabs-leave-to {
   opacity: 0;
-  transform: translateY(6px);
-}
-
-.tabs-leave-active {
-  position: absolute !important;
-}
-
-.tabs-move {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>

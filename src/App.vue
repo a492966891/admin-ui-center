@@ -39,18 +39,18 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
 /* 全局基础渐变转场微效 */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.25s ease-out;
+  transition: opacity var(--transition-base), transform var(--transition-base);
 }
 .page-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 .page-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 </style>

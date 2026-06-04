@@ -13,8 +13,9 @@ export interface RequestConfig extends AxiosRequestConfig {
 export interface ApiResponse<T = any> {
   code: number;
   data: T;
-  message: string;
-  timestamp: number;
+  message?: string;
+  msg?: string;
+  timestamp?: number;
 }
 
 // 简易 UUID 生成
@@ -59,6 +60,30 @@ const instance: AxiosInstance = axios.create({
     'Content-Type': 'application/json;charset=utf-8',
   },
 });
+
+// 引入本地纯前端 Mock 处理器以全方位去除 Nitro 兼容依赖
+import { handleMockRequest } from '@/mock';
+
+const defaultAdapter = instance.defaults.adapter || axios.defaults.adapter;
+instance.defaults.adapter = async function (config) {
+  const url = config.url || '';
+  if (url.includes('/mock/')) {
+    return handleMockRequest(config);
+  }
+  // 兼容新版 axios（>=1.6）：defaults.adapter 可能是数组而非函数
+  if (typeof (axios as any).getAdapter === 'function') {
+    const resolvedAdapter = (axios as any).getAdapter(defaultAdapter);
+    return resolvedAdapter(config);
+  }
+  if (typeof defaultAdapter === 'function') {
+    return defaultAdapter(config);
+  }
+  const fallbackAdapter = axios.defaults.adapter;
+  if (typeof fallbackAdapter === 'function') {
+    return fallbackAdapter(config);
+  }
+  return Promise.reject(new Error('Axios Adapter not found.'));
+};
 
 let loadingInstance: any = null;
 let loadingCount = 0;
@@ -109,6 +134,10 @@ instance.interceptors.request.use(
       }
     }
 
+    // 注入客户端 ID 头部 (后台校验必填)
+    const clientId = import.meta.env.VITE_APP_CLIENT_ID || 'e5cd7e4891bf95d1d19206ce24a7b32e';
+    config.headers['clientid'] = clientId;
+
     return config;
   },
   (error) => {
@@ -126,7 +155,8 @@ instance.interceptors.response.use(
       hideLoading();
     }
 
-    const { code, message, data } = response.data;
+    const { code, data } = response.data;
+    const message = response.data.msg || response.data.message;
 
     // 业务正常
     if (code === 200) {
@@ -153,7 +183,7 @@ instance.interceptors.response.use(
     const { response } = error;
     if (response) {
       const { status, data } = response;
-      const msg = data?.message || '请求处理异常';
+      const msg = data?.msg || data?.message || '请求处理异常';
 
       switch (status) {
         case 401:

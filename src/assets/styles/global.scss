@@ -40,7 +40,7 @@ body {
 .el-button {
   --el-border-radius-base: var(--border-radius-small);
   font-weight: 500;
-  
+
   &--primary {
     --el-button-bg-color: var(--primary-color);
     --el-button-border-color: var(--primary-color);
@@ -53,8 +53,6 @@ body {
 
 // 侧边栏菜单样式深度定制
 .app-sidebar {
-  transition: width var(--transition-base);
-
   .el-menu {
     --el-menu-bg-color: var(--sidebar-bg) !important;
     --el-menu-text-color: var(--sidebar-text) !important;
@@ -64,31 +62,16 @@ body {
     
     border-right: none;
     background-color: var(--sidebar-bg) !important;
-    transition: width var(--transition-base);
+
+    // 当非折叠状态时，指定宽度，折叠状态下由 Element Plus 默认撑开（64px）
+    &:not(.el-menu--collapse) {
+      width: var(--sidebar-width);
+    }
     
     .el-menu-item, 
     .el-sub-menu__title {
-      border-radius: var(--border-radius-small);
-      margin: 4px 8px;
-      height: 48px;
-      line-height: 48px;
       color: var(--sidebar-text) !important;
-      transition: var(--transition-base);
-      display: flex;
-      align-items: center;
-
-      span {
-        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 1;
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-
-      .el-sub-menu__icon-arrow {
-        transition: opacity 0.2s ease, transform var(--transition-base);
-        opacity: 1;
-      }
+      transition: background-color var(--transition-base), color var(--transition-base);
       
       &:hover {
         background-color: var(--sidebar-active-bg) !important;
@@ -111,25 +94,6 @@ body {
       
       .el-icon {
         color: var(--sidebar-text);
-        transition: color var(--transition-base);
-      }
-    }
-  }
-
-  // 侧边栏折叠时的行为覆盖，确保文本淡出并且不换行挤压
-  &.collapsed {
-    .el-menu--collapse {
-      width: var(--sidebar-collapsed-width) !important;
-
-      .el-menu-item,
-      .el-sub-menu__title {
-        span {
-          width: 0 !important;
-          opacity: 0 !important;
-        }
-        .el-sub-menu__icon-arrow {
-          opacity: 0 !important;
-        }
       }
     }
   }

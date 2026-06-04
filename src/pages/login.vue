@@ -16,11 +16,11 @@
       <div class="card-left hidden-sm-and-down flex-center">
         <div class="brand-info">
           <h2>Admin Center</h2>
-          <p>模块化 · 响应式 · 极致动效的企业级管理后台</p>
+          <p>模块化 · 响应式 的企业级管理后台</p>
           <div class="feature-tags">
-            <span class="tag flex-center"><el-icon><Check /></el-icon> Nuxt 4 & TypeScript</span>
+            <span class="tag flex-center"><el-icon><Check /></el-icon> Vite 4 & TypeScript</span>
             <span class="tag flex-center"><el-icon><Check /></el-icon> Element Plus & SCSS</span>
-            <span class="tag flex-center"><el-icon><Check /></el-icon> ECharts 5 炫酷大屏</span>
+            <span class="tag flex-center"><el-icon><Check /></el-icon> ECharts 5</span>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
             <el-form-item prop="username">
               <el-input
                 v-model="loginForm.username"
-                placeholder="用户名 (admin / test)"
+                placeholder="用户名"
                 :prefix-icon="User"
               />
             </el-form-item>
@@ -53,31 +53,30 @@
               <el-input
                 v-model="loginForm.password"
                 type="password"
-                placeholder="密码 (123456)"
+                placeholder="密码"
                 :prefix-icon="Lock"
                 show-password
               />
             </el-form-item>
 
             <!-- 验证码 -->
-            <el-form-item prop="captcha" class="captcha-form-item">
+            <el-form-item v-if="captchaEnabled" prop="code" class="captcha-form-item">
               <div class="captcha-wrapper flex-between w-full">
                 <el-input
-                  v-model="loginForm.captcha"
+                  v-model="loginForm.code"
                   placeholder="验证码"
                   :prefix-icon="Key"
                   class="captcha-input"
                 />
-                <div class="captcha-img flex-center" @click="refreshCaptcha" title="点击刷新">
-                  {{ captchaText }}
+                <div class="captcha-img flex-center" @click="getCode" title="点击刷新">
+                  <img v-if="codeUrl" :src="codeUrl" alt="验证码" class="captcha-code-img" />
                 </div>
               </div>
             </el-form-item>
 
-            <!-- 记住密码与辅助链接 -->
+            <!-- 记住密码 -->
             <div class="helper-bar flex-between w-full">
-              <el-checkbox v-model="rememberMe">记住密码</el-checkbox>
-              <el-link type="primary" :underline="false">忘记密码？</el-link>
+              <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
             </div>
 
             <!-- 登录按钮 -->
@@ -99,12 +98,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '~/stores/modules/user';
 import { User, Lock, Key, Check } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import type { FormInstance } from 'element-plus';
+import { request } from '~/utils/request';
 
 const route = useRoute();
 const router = useRouter();
@@ -112,42 +112,50 @@ const userStore = useUserStore();
 
 const loginFormRef = ref<FormInstance>();
 const loading = ref(false);
-const rememberMe = ref(false);
-const captchaText = ref('');
 
-const loginForm = reactive({
+const loginForm = ref({
   username: '',
   password: '',
-  captcha: '',
+  code: '',
+  uuid: '',
+  rememberMe: false,
 });
 
 // 表单校验规则
 const loginRules = {
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  captcha: [
-    { required: true, message: '请输入验证码', trigger: 'blur' },
-    {
-      validator: (_rule: any, value: string, callback: any) => {
-        if (value.toLowerCase() !== captchaText.value.toLowerCase()) {
-          callback(new Error('验证码错误'));
-        } else {
-          callback();
-        }
-      },
-      trigger: 'blur',
-    },
-  ],
+  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 };
 
-// 简单的前端生成验证码
-const refreshCaptcha = () => {
-  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let code = '';
-  for (let i = 0; i < 4; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
+const codeUrl = ref('');
+const captchaEnabled = ref(true);
+
+// 获取验证码
+const getCode = async () => {
+  try {
+    const res = await request.get<any>('/auth/code');
+    const { data } = res;
+    captchaEnabled.value = data.captchaEnabled === undefined ? true : data.captchaEnabled;
+    if (captchaEnabled.value) {
+      loginForm.value.code = '';
+      codeUrl.value = 'data:image/gif;base64,' + data.img;
+      loginForm.value.uuid = data.uuid;
+    }
+  } catch (err) {
+    console.error('获取验证码失败:', err);
   }
-  captchaText.value = code;
+};
+
+// 记住密码：读取本地存储
+const getLoginData = () => {
+  const username = localStorage.getItem('username');
+  const password = localStorage.getItem('password');
+  const rememberMe = localStorage.getItem('rememberMe');
+  
+  if (username !== null) loginForm.value.username = username;
+  if (password !== null) loginForm.value.password = password;
+  loginForm.value.rememberMe = rememberMe === 'true';
 };
 
 // 登录提交
@@ -158,12 +166,20 @@ const handleLogin = async () => {
     if (valid) {
       loading.value = true;
       try {
-        await userStore.login({
-          username: loginForm.username,
-          password: loginForm.password,
-        });
+        // 保存或清空记住密码
+        if (loginForm.value.rememberMe) {
+          localStorage.setItem('username', loginForm.value.username);
+          localStorage.setItem('password', loginForm.value.password);
+          localStorage.setItem('rememberMe', 'true');
+        } else {
+          localStorage.removeItem('username');
+          localStorage.removeItem('password');
+          localStorage.removeItem('rememberMe');
+        }
         
-        ElMessage.success('登录成功，正在加载后台数据...');
+        await userStore.login(loginForm.value);
+        
+        ElMessage.success('登录成功，正在进入系统...');
         
         // 重定向逻辑
         const redirect = route.query.redirect as string;
@@ -174,8 +190,10 @@ const handleLogin = async () => {
         }
       } catch (err: any) {
         console.error(err);
-        refreshCaptcha();
-        loginForm.captcha = '';
+        // 重新拉取验证码
+        if (captchaEnabled.value) {
+          getCode();
+        }
       } finally {
         loading.value = false;
       }
@@ -184,7 +202,8 @@ const handleLogin = async () => {
 };
 
 onMounted(() => {
-  refreshCaptcha();
+  getCode();
+  getLoginData();
 });
 </script>
 
@@ -332,8 +351,15 @@ onMounted(() => {
     user-select: none;
     font-style: italic;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
     &:hover {
       background: rgba(255, 255, 255, 0.15);
+    }
+
+    .captcha-code-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -346,10 +372,6 @@ onMounted(() => {
     .el-checkbox__label {
       font-size: 13px;
     }
-  }
-  
-  .el-link {
-    font-size: 13px;
   }
 }
 
