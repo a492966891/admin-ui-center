@@ -1,0 +1,74 @@
+// app/assets/styles/variables.scss
+
+// 基础变量定义（供SCSS内部或Vite配置引用，同时与CSS变量结合）
+$primary-color: #5856d6; // 现代深紫蓝色，比普通蓝色更有设计感
+$success-color: #34c759; // 苹果绿
+$warning-color: #ff9500; // 橙黄
+$danger-color: #ff3b30;  // 珊瑚红
+$info-color: #8e8e93;    // 优雅灰
+
+:root {
+  // 主题色
+  --primary-color: #{$primary-color};
+  --primary-color-hover: #6e6cf0;
+  --primary-color-light: #ecebfa;
+  --success-color: #{$success-color};
+  --warning-color: #{$warning-color};
+  --danger-color: #{$danger-color};
+  --info-color: #{$info-color};
+
+  // 灰度与底色 (亮色模式)
+  --bg-color: #f6f8fa;
+  --card-bg-color: #ffffff;
+  --border-color: #e5e8eb;
+  --text-main: #1d1d1f;
+  --text-regular: #48484a;
+  --text-placeholder: #aeaeb2;
+
+  // 侧边栏与头部尺寸及颜色 (亮色模式下默认深色侧边栏)
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 68px;
+  --header-height: 64px;
+  --tabs-height: 44px;
+
+  --sidebar-bg: #0b0f19; // 极佳的深墨蓝色
+  --sidebar-text: #94a3b8;
+  --sidebar-active-bg: #1e293b;
+  --sidebar-active-text: #ffffff;
+  --sidebar-border: #1e293b;
+
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --header-text: #1d1d1f;
+  --header-border: #e5e8eb;
+
+  // 动效与阴影
+  --border-radius-base: 12px; // 现代圆角偏大，更柔和
+  --border-radius-small: 8px;
+  --box-shadow-card: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+  --box-shadow-popover: 0 12px 32px 4px rgba(0, 0, 0, 0.09);
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-blur: blur(12px);
+}
+
+// 暗色主题变量覆盖
+[data-theme='dark'] {
+  --bg-color: #09090b; // 极深灰黑
+  --card-bg-color: #18181b; // 深卡片灰
+  --border-color: #27272a;
+  --text-main: #f4f4f5;
+  --text-regular: #a1a1aa;
+  --text-placeholder: #52525b;
+
+  --sidebar-bg: #09090b;
+  --sidebar-text: #a1a1aa;
+  --sidebar-active-bg: #27272a;
+  --sidebar-active-text: #ffffff;
+  --sidebar-border: #27272a;
+
+  --header-bg: rgba(24, 24, 27, 0.8);
+  --header-text: #f4f4f5;
+  --header-border: #27272a;
+
+  --box-shadow-card: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
+  --box-shadow-popover: 0 12px 32px 4px rgba(0, 0, 0, 0.6);
+}

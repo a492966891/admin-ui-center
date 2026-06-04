@@ -1,0 +1,44 @@
+{
+  "name": "admin-center",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev --dotenv .env.development",
+    "dev:test": "nuxt dev --dotenv .env.test",
+    "dev:pre": "nuxt dev --dotenv .env.pre",
+    "dev:prod": "nuxt dev --dotenv .env.production",
+    "build": "nuxt build --dotenv .env.production",
+    "build:dev": "nuxt build --dotenv .env.development",
+    "build:test": "nuxt build --dotenv .env.test",
+    "build:pre": "nuxt build --dotenv .env.pre",
+    "build:prod": "nuxt build --dotenv .env.production",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "nuxt": "^4.4.6",
+    "vue": "^3.5.34",
+    "vue-router": "^5.0.7",
+    "pinia": "^2.1.7",
+    "@pinia/nuxt": "^0.5.1",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
+    "@vueuse/nuxt": "^10.9.0",
+    "@vueuse/core": "^10.9.0",
+    "@element-plus/nuxt": "^1.0.7",
+    "element-plus": "^2.6.1",
+    "@element-plus/icons-vue": "^2.3.1",
+    "nuxt-echarts": "^0.2.1",
+    "echarts": "^5.5.0",
+    "vue-echarts": "^6.6.9",
+    "axios": "^1.6.8",
+    "dayjs": "^1.11.10",
+    "lodash-es": "^4.17.21",
+    "sass": "^1.72.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.3"
+  }
+}

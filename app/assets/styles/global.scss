@@ -1,0 +1,168 @@
+// app/assets/styles/global.scss
+@import 'element-plus/theme-chalk/dark/css-vars.css';
+@import './reset.scss';
+
+// 自定义全局滚动条
+body {
+  @include scrollbar;
+}
+
+// 统一过度动画
+.fade-transform-enter-active,
+.fade-transform-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+// Element Plus 覆盖样式 (实现极致的 Premium 感)
+.el-card {
+  --el-card-border-radius: var(--border-radius-base);
+  --el-card-border-color: var(--border-color);
+  --el-card-bg-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--box-shadow-card) !important;
+  transition: var(--transition-base);
+
+  &.is-hover-shadow:hover {
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.06) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.el-button {
+  --el-border-radius-base: var(--border-radius-small);
+  font-weight: 500;
+  
+  &--primary {
+    --el-button-bg-color: var(--primary-color);
+    --el-button-border-color: var(--primary-color);
+    --el-button-hover-bg-color: var(--primary-color-hover);
+    --el-button-hover-border-color: var(--primary-color-hover);
+    --el-button-active-bg-color: var(--primary-color);
+    --el-button-active-border-color: var(--primary-color);
+  }
+}
+
+// 侧边栏菜单样式深度定制
+.app-sidebar {
+  transition: width var(--transition-base);
+
+  .el-menu {
+    --el-menu-bg-color: var(--sidebar-bg) !important;
+    --el-menu-text-color: var(--sidebar-text) !important;
+    --el-menu-active-color: #ffffff !important;
+    --el-menu-hover-bg-color: var(--sidebar-active-bg) !important;
+    --el-menu-hover-text-color: var(--sidebar-active-text) !important;
+    
+    border-right: none;
+    background-color: var(--sidebar-bg) !important;
+    transition: width var(--transition-base);
+    
+    .el-menu-item, 
+    .el-sub-menu__title {
+      border-radius: var(--border-radius-small);
+      margin: 4px 8px;
+      height: 48px;
+      line-height: 48px;
+      color: var(--sidebar-text) !important;
+      transition: var(--transition-base);
+      display: flex;
+      align-items: center;
+
+      span {
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .el-sub-menu__icon-arrow {
+        transition: opacity 0.2s ease, transform var(--transition-base);
+        opacity: 1;
+      }
+      
+      &:hover {
+        background-color: var(--sidebar-active-bg) !important;
+        color: var(--sidebar-active-text) !important;
+        
+        .el-icon {
+          color: var(--sidebar-active-text) !important;
+        }
+      }
+      
+      &.is-active {
+        background-color: var(--primary-color) !important;
+        color: #ffffff !important;
+        font-weight: 600;
+        
+        .el-icon {
+          color: #ffffff !important;
+        }
+      }
+      
+      .el-icon {
+        color: var(--sidebar-text);
+        transition: color var(--transition-base);
+      }
+    }
+  }
+
+  // 侧边栏折叠时的行为覆盖，确保文本淡出并且不换行挤压
+  &.collapsed {
+    .el-menu--collapse {
+      width: var(--sidebar-collapsed-width) !important;
+
+      .el-menu-item,
+      .el-sub-menu__title {
+        span {
+          width: 0 !important;
+          opacity: 0 !important;
+        }
+        .el-sub-menu__icon-arrow {
+          opacity: 0 !important;
+        }
+      }
+    }
+  }
+  
+  // 子菜单下拉的包裹容器
+  .el-menu--inline {
+    background-color: var(--sidebar-bg) !important;
+  }
+}
+
+// 隐藏元素工具类
+.hidden {
+  display: none !important;
+}
+
+// 布局辅助类
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}

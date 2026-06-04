@@ -1,0 +1,40 @@
+
+========================================
+TIMESTAMP: 2026-06-03T05:48:57.124Z
+ROW DATA: {
+  "status": 0
+}
+STACK TRACE:
+Error
+    at Proxy.handleStatusChange (http://localhost:3000/_nuxt/pages/system/user/index.vue?t=1780465736825:124:21)
+    at onChange (http://localhost:3000/_nuxt/pages/system/user/index.vue?t=1780465736825:275:44)
+    at callWithErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:197:19)
+    at callWithAsyncErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:204:17)
+    at emit (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:4455:5)
+    at http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8352:45
+    at setup (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/element-plus@2.14.1_vue@3.5.35_typescript@5.9.3_/node_modules/element-plus/es/components/switch/src/switch.vue_vue_type_script_setup_true_lang.mjs?v=08864557:73:4)
+    at callWithErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:197:19)
+    at setupStatefulComponent (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8160:25)
+    at setupComponent (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8122:36)
+========================================
+
+
+========================================
+TIMESTAMP: 2026-06-03T05:50:15.001Z
+ROW DATA: {
+  "status": 0
+}
+STACK TRACE:
+Error
+    at Proxy.handleStatusChange (http://localhost:3000/_nuxt/pages/system/user/index.vue?t=1780465812683:124:21)
+    at onChange (http://localhost:3000/_nuxt/pages/system/user/index.vue?t=1780465812683:275:44)
+    at callWithErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:197:19)
+    at callWithAsyncErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:204:17)
+    at emit (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:4455:5)
+    at http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8352:45
+    at setup (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/element-plus@2.14.1_vue@3.5.35_typescript@5.9.3_/node_modules/element-plus/es/components/switch/src/switch.vue_vue_type_script_setup_true_lang.mjs?v=08864557:73:4)
+    at callWithErrorHandling (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:197:19)
+    at setupStatefulComponent (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8160:25)
+    at setupComponent (http://localhost:3000/_nuxt/@fs/D:/web_project/bisai/ctc-admin-center/ctc-admin-center/node_modules/.pnpm/@vue+runtime-core@3.5.35/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=08864557:8122:36)
+========================================
+
