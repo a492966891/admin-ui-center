@@ -53,7 +53,7 @@ function removePending(config: RequestConfig) {
 
 // 创建实例
 const instance: AxiosInstance = axios.create({
-  baseURL: typeof process !== 'undefined' ? (process.env.NUXT_PUBLIC_API_BASE || '/api') : '/api',
+  baseURL: '/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
@@ -86,6 +86,14 @@ function hideLoading() {
 // 请求拦截器
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig & RequestConfig) => {
+    // 动态获取 runtimeConfig 中的 apiBase 作为 baseURL，支持多环境配置
+    try {
+      const runtimeConfig = useRuntimeConfig();
+      config.baseURL = runtimeConfig.public.apiBase || '/api';
+    } catch (err) {
+      // 容错降级
+    }
+
     // 处理取消重复请求
     addPending(config);
 

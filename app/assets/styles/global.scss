@@ -1,6 +1,5 @@
 // app/assets/styles/global.scss
-@import 'element-plus/theme-chalk/dark/css-vars.css';
-@import './reset.scss';
+@use './reset';
 
 // 自定义全局滚动条
 body {

@@ -24,7 +24,10 @@ export default defineNuxtConfig({
   ],
 
   // 引入全局 CSS 样式
-  css: ['~/assets/styles/global.scss'],
+  css: [
+    'element-plus/theme-chalk/dark/css-vars.css',
+    '~/assets/styles/global.scss'
+  ],
 
   vite: {
     css: {
@@ -44,8 +47,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
-      appTitle: process.env.NUXT_PUBLIC_APP_TITLE || '管理后台',
+      apiBase: '/api',
+      appTitle: '管理后台',
       appVersion: '1.0.0',
     },
   },
